@@ -63,6 +63,10 @@ end
 
 def divide_main_section(section_set)
   calc_sections = []
+  set_dazaifu = Set.new ['西鉄二日市', '太宰府']
+
+  return [set_dazaifu] if section_set == set_dazaifu
+
   section_set.each do |station|
     sec_n = Set.new ['西鉄福岡(天神)', station]
     calc_sections << sec_n if sec_n.size == 2
@@ -75,11 +79,10 @@ origin, destination = ARGV.shift.split(',')
 section_set = Set.new [origin, destination]
 branch_section = nil
 main_section = nil
-calc_sections = []
 
 total_distance = 0.0
 
-if section_set.include?('太宰府')
+if section_set.include?('太宰府') && !section_set.include?('西鉄二日市')
   branch_section, main_section = divide_branch_section(section_set, '太宰府')
 elsif section_set.include?('甘木')
   branch_section, main_section = divide_branch_section(section_set, '甘木')
