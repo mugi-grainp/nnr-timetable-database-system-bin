@@ -13,8 +13,8 @@
 db_dir="$1""/""$2"
 
 # 時刻表ファイルの2行目 (データ先頭行) と末尾行を取得
-timetable_data_first_line=$(head -n 2 "$(dirname $0)/../${db_dir}/timetable_$2_$3.csv" | tail -n 1)
-timetable_data_tail_line=$(tail -n 1 "$(dirname $0)/../${db_dir}/timetable_$2_$3.csv")
+timetable_data_first_line=$(head -n 2 "$(dirname $0)/../../${db_dir}/timetable_$2_$3.csv" | tail -n 1)
+timetable_data_tail_line=$(tail -n 1 "$(dirname $0)/../../${db_dir}/timetable_$2_$3.csv")
 
 # 列車番号・始発駅・終着駅情報を取得
 ## 時刻表ファイルから読み込んだカンマ区切り行を配列化
@@ -32,8 +32,8 @@ destination_sta_name=${destination_sta_info[2]}
 destination_sta_arrival_time=${destination_sta_info[3]}
 
 # 管理番号に対する運用情報を算出する
-LANG=C sort -s -t, -k2,2 $(dirname $0)/../${db_dir}/relation_operation_and_train_$2.csv > /tmp/$$-sorted-relation
-LANG=C sort -s -t, -k1,1 $(dirname $0)/../${db_dir}/operation_cartype_info_$2.csv       > /tmp/$$-sorted-cartype-info
+LANG=C sort -s -t, -k2,2 $(dirname $0)/../../${db_dir}/relation_operation_and_train_$2.csv > /tmp/$$-sorted-relation
+LANG=C sort -s -t, -k1,1 $(dirname $0)/../../${db_dir}/operation_cartype_info_$2.csv       > /tmp/$$-sorted-cartype-info
 
 join -t, -1 2 -2 1 -o 1.1 1.2 1.3 2.2 2.3 2.4 2.5 /tmp/$$-sorted-relation /tmp/$$-sorted-cartype-info |
 grep "^$3" |

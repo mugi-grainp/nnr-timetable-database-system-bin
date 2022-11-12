@@ -9,6 +9,7 @@
 
 db_dir="$1"
 dia_day="$2"
+bindir="$(dirname $0)/.."
 
 case "$3" in
     "all-list"          ) output_flag="-a 1" ;;
@@ -32,8 +33,8 @@ find ${db_dir}/${dia_day}/ -type f -name 'timetable_'"${dia_day}"'*.csv'        
 sed -e "s;^${db_dir}/${dia_day}/timetable_;;" -e 's;\.csv$;;' -e 's;_; ;'       |
 
 # 列車編成両数表の1行を出力する
-xargs -IXXX bash -c "bin/output-traincartable-line.sh ${db_dir} XXX" |
-LANG=C sort -s -t, -k1,1                                             > /tmp/$$-traincartable-list.tmp
+xargs -IXXX bash -c "bash ${bindir}/bin/output-traincartable-line.sh ${db_dir} XXX" |
+LANG=C sort -s -t, -k1,1                                                            > /tmp/$$-traincartable-list.tmp
 
 # 列車リストを結合用にソートする
 cat ${db_dir}/${dia_day}/train_list_${dia_day}.csv |
