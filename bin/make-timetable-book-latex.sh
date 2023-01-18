@@ -10,6 +10,7 @@
 db_dir="$1"
 dia_day="$2"
 direction="$3"
+bindir="$(dirname $0)/../bin"
 
 # 列車は1ページにつき20本ずつセット
 trains_per_page=20
@@ -39,7 +40,7 @@ fi
 # 時刻表生成用順序表
 train_list_file="timetable_book/train_list_for_timetable_${dia_day}_${direction}.csv"
 # 時刻表生成用駅一覧
-station_list_file="bin/station_list_for_timetable_${direction}.txt"
+station_list_file="$bindir/station_list_for_timetable_${direction}.txt"
 
 # 各列車の時刻表を出力
 # 車両取替前後の重複分だけを取り除くため、5行目の uniq 前にはソートしない
@@ -48,8 +49,8 @@ cut -d, -f1                    |
 sed 's/-[12]//'                |
 uniq                           |
 tee /tmp/$$-train-num-list.tmp |
-xargs -IXXX bash -c "bin/sfjoin.rb -t, -j 1 -m LOUTER ${station_list_file} \
-    <(bin/make-timetable-book-each-train.sh ${db_dir} ${dia_day} ${direction} XXX) > /tmp/$$-timetable-XXX.tmp"
+xargs -IXXX bash -c "$bindir/sfjoin.rb -t, -j 1 -m LOUTER ${station_list_file} \
+    <($bindir/make-timetable-book-each-train.sh ${db_dir} ${dia_day} ${direction} XXX) > /tmp/$$-timetable-XXX.tmp"
 
 # 列車番号リストをもとに、LaTeXソースを作成
 # ヘッダ出力
@@ -151,7 +152,7 @@ sed -E 's/([0-9]{2}):([0-9]{2}):00/\1\2/g' > /tmp/$$-timetable-all-processed.tmp
 # 1ページ出力
 train_count=$(cat /tmp/$$-train-num-list.tmp | wc -l)
 seq 2 $trains_per_page $train_count |
-xargs -IXXX bash -c "bin/make-timetable-book-latex-each-page.sh \
+xargs -IXXX bash -c "$bindir/make-timetable-book-latex-each-page.sh \
                      /tmp/$$-timetable-all-processed.tmp XXX $trains_per_page | \
                      sed 's/<DIA_DAY>/$dia_day_str/g;s/<DIRECTION>/$direction_str/g' > /tmp/$$-page-from-XXX.tmp"
 # ページ統合

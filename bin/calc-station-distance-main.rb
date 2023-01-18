@@ -105,4 +105,4 @@ end
 total_distance += main_distance
 total_distance += kilometers[branch_section] if branch_section.length != 0
 
-printf "%2.1f\n", total_distance
+printf "%.1f\n", total_distance

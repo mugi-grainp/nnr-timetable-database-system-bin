@@ -94,7 +94,7 @@ ARGF.each do |line|
 
   total_distance = 0.0
 
-  if section_set.include?('太宰府')
+  if section_set.include?('太宰府') && !section_set.include?('西鉄二日市')
     branch_section, main_section = divide_branch_section(section_set, '太宰府')
   elsif section_set.include?('甘木')
     branch_section, main_section = divide_branch_section(section_set, '甘木')

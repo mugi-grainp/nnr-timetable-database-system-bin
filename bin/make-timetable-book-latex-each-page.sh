@@ -5,6 +5,8 @@
 #     $2: 出力開始位置（m本目から）
 #     $3: 出力本数（n本分）
 
+bindir="$(dirname $0)/../bin"
+
 # 出力区間指定
 timetable_file="$1"
 start_pos="$2"
@@ -42,7 +44,7 @@ cat $timetable_file |
 # 1ページに掲載する分を切り出し
 cut -d, -f1,${start_pos}-${end_pos}  |
 # LaTeXコードへの変換の主要部分
-awk -v trains_per_page=${trains_per_page} -f bin/translate-to-latex.awk |
+awk -v trains_per_page=${trains_per_page} -f $bindir/translate-to-latex.awk |
 # 区切り記号（カンマ）を、TeXの表区切り記号である & に置換
 sed 's/,/ \& /g' |
 # 生成過程で生じる優等列車太字タグの空タグを除去

@@ -169,13 +169,13 @@ station_list = Set.new
 # 各駅の座標比率による駅出力位置定義
 x_position = {}
 x_position["西鉄福岡(天神)"] = 2.0
-x_position["西鉄二日市"] = 6.0
-x_position["太宰府"] = 8.0
-x_position["筑紫"] = 10.0
+x_position["西鉄二日市"] = 5.5
+x_position["太宰府"] = 7.0
+x_position["筑紫"] = 9.0
 x_position["甘木"] = 11.0
 x_position["本郷"] = 13.0
 x_position["西鉄小郡"] = 14.0
-x_position["北野"] = 15.0
+x_position["北野"] = 16.0
 x_position["西鉄久留米"] = 17.0
 x_position["花畑"] = 19.0
 x_position["試験場前"] = 21.0
@@ -239,34 +239,49 @@ puts "unset key"
 puts "unset xtics"
 puts "unset ytics"
 
-puts "set xrange [#{left_pos_min - 2}:#{right_pos_max + 2}]"
-puts "set yrange [0:#{station_list_output_line + 1}]"
+puts "set xrange [#{left_pos_min - 3}:#{right_pos_max + 3}]"
+puts "set yrange [0:#{station_list_output_line + 1.2}]"
 
-puts "set terminal emf color size 1300,#{(operation.trains.length + 2) * 100}"
-puts "set output \"#{dia_day}_#{operation_id}.emf\""
+# puts "set terminal emf color size 1300,#{(operation.trains.length + 2) * 100}"
+puts "set terminal pdf color size 21cm,#{(operation.trains.length + 2) * 1.2}cm"
+puts "set output \"#{dia_day}_#{operation_id}.pdf\""
 
 ## 駅ラベルを出力
-puts "set label 1  center at first  2.0, #{station_list_output_line} \"福岡（天神）\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("西鉄福岡(天神)")
-puts "set label 2  center at first  6.0, #{station_list_output_line} \"二日市\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("西鉄二日市")
-puts "set label 15 center at first  8.0, #{station_list_output_line} \"太宰府\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("太宰府")
-puts "set label 3  center at first  10.0, #{station_list_output_line} \"筑紫\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("筑紫")
-puts "set label 4  center at first  11.0, #{station_list_output_line} \"甘木\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("甘木")
-puts "set label 5  center at first 13.0, #{station_list_output_line} \"本郷\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("本郷")
-puts "set label 6  center at first 14.0, #{station_list_output_line} \"小郡\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("小郡")
-puts "set label 7  center at first 15.0, #{station_list_output_line} \"北野\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("北野")
-puts "set label 8  center at first 17.0, #{station_list_output_line} \"久留米\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("西鉄久留米")
-puts "set label 9  center at first 19.0, #{station_list_output_line} \"花畑\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("花畑")
-puts "set label 10 center at first 21.0, #{station_list_output_line} \"試験場前\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("試験場前")
-puts "set label 11 center at first 23.0, #{station_list_output_line} \"津福\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("津福")
-puts "set label 12 center at first 25.0, #{station_list_output_line} \"大善寺\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("大善寺")
-puts "set label 13 center at first 27.0, #{station_list_output_line} \"柳川\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("西鉄柳川")
-puts "set label 14 center at first 31.0, #{station_list_output_line} \"大牟田\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\"" if station_list.include?("大牟田")
+puts "set label 1  center at first  2.0, #{station_list_output_line} \"福岡（天神）\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("西鉄福岡(天神)")
+puts "set label 2  center at first  5.5, #{station_list_output_line} \"二日市\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("西鉄二日市")
+puts "set label 15 center at first  7.0, #{station_list_output_line} \"太宰府\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("太宰府")
+puts "set label 3  center at first  9.0, #{station_list_output_line} \"筑紫\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("筑紫")
+puts "set label 4  center at first 11.0, #{station_list_output_line} \"甘木\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("甘木")
+puts "set label 5  center at first 13.0, #{station_list_output_line} \"本郷\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("本郷")
+puts "set label 6  center at first 14.0, #{station_list_output_line} \"小郡\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("西鉄小郡")
+puts "set label 7  center at first 16.0, #{station_list_output_line} \"北野\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("北野")
+puts "set label 8  center at first 17.0, #{station_list_output_line} \"久留米\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("西鉄久留米")
+puts "set label 9  center at first 19.0, #{station_list_output_line} \"花畑\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("花畑")
+puts "set label 10 center at first 21.0, #{station_list_output_line} \"試験場前\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("試験場前")
+puts "set label 11 center at first 23.0, #{station_list_output_line} \"津福\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("津福")
+puts "set label 12 center at first 25.0, #{station_list_output_line} \"大善寺\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("大善寺")
+puts "set label 13 center at first 27.0, #{station_list_output_line} \"柳川\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("西鉄柳川")
+puts "set label 14 center at first 31.0, #{station_list_output_line} \"大牟田\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\"" if station_list.include?("大牟田")
 
 ## 車両系統基礎情報を出力
-puts "set label 21 left at graph 0.0, 1.0 offset 2, -1.5 \"#{operation.operation_title}\" textcolor rgb \"gray0\" font \"MS PGothic,24pt\" boxed"
-puts "set label 22 center at graph 0.5, 1.0 offset 0, -1.5 \"#{operation.car_type}形#{operation.car_boxes}両\" textcolor rgb \"gray0\" font \"MS PGothic,24pt\""
-puts "set label 23 right at graph 1.0, 1.0 offset -2, -1.5 \"運用距離：#{operation.run_distance} km\" textcolor rgb \"gray0\" font \"MS PGothic,24pt\""
-puts "set arrow 1 nohead from #{left_pos_min - 2}, #{station_list_output_line + 0.25} to #{right_pos_max + 2}, #{station_list_output_line + 0.25}"
+## 充当形式を正しく出力する処理を付加
+case operation.car_type
+when '3010F'
+  car_type_str = '3000形'
+when '3017F+3018F'
+  car_type_str = '3000形'
+when '6000'
+  car_type_str = '6000形・6050形'
+when '7000'
+  car_type_str = '7000形・7050形'
+else
+  car_type_str = operation.car_type + '形'
+end
+
+puts "set label 21 left at graph 0.0, 1.0 offset 2, -1.5 \"#{operation.operation_title}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,24pt\" boxed"
+puts "set label 22 center at graph 0.5, 1.0 offset 0, -1.5 \"#{car_type_str}#{operation.car_boxes}両\" textcolor rgb \"gray0\" font \"BIZ UDGothic,24pt\""
+puts "set label 23 right at graph 1.0, 1.0 offset -2, -1.5 \"運用距離：#{operation.run_distance} km\" textcolor rgb \"gray0\" font \"BIZ UDGothic,24pt\""
+puts "set arrow 1 nohead from #{left_pos_min - 3}, #{station_list_output_line + 0.3} to #{right_pos_max + 3}, #{station_list_output_line + 0.3}"
 
 ## 各列車を示す線と列車番号・時刻を出力
 counter = 0
@@ -287,22 +302,23 @@ operation.trains.each do |train|
     # 始発時刻を始発座標の右・終着時刻を終着座標の左
     puts "set label #{label_time_counter} left at first " +
         "#{x_position[train.origin_station]}, #{train_id_label_ypos} " +
-         "offset 1.5, 0 \"#{origin_deptime}\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\""
+         "offset 1.5, 0 \"#{origin_deptime}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\""
     puts "set label #{label_time_counter + 1} right at first " +
          "#{x_position[train.dest_station]}, #{train_id_label_ypos} " +
-         "offset -1.5, 0 \"#{dest_arrivaltime}\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\""
+         "offset -1.5, 0 \"#{dest_arrivaltime}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\""
   else
     # 始発時刻を始発座標の左・終着時刻を終着座標の右
     puts "set label #{label_time_counter} right at first " +
          "#{x_position[train.origin_station]}, #{train_id_label_ypos} " +
-         "offset -1.5, 0 \"#{origin_deptime}\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\""
+         "offset -1.5, 0 \"#{origin_deptime}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\""
     puts "set label #{label_time_counter + 1} left at first " +
          "#{x_position[train.dest_station]}, #{train_id_label_ypos} " +
-         "offset 1.5, 0 \"#{dest_arrivaltime}\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\""
+         "offset 1.5, 0 \"#{dest_arrivaltime}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\""
   end
 
   # 列車番号ラベルを出力
-  puts "set label #{label_train_id_counter} center at first #{train_id_label_xpos}, #{train_id_label_ypos} offset 0, 1 \"#{train.train_id}\" textcolor rgb \"gray0\" font \"MS PGothic,20pt\""
+  train_id_str = train.train_id.gsub(/-[012]/, '')
+  puts "set label #{label_train_id_counter} center at first #{train_id_label_xpos}, #{train_id_label_ypos} offset 0, 1 \"#{train_id_str}\" textcolor rgb \"gray0\" font \"BIZ UDGothic,20pt\""
 
   # 回送表示の四角を出力
   # 箱ダイヤを引くための座標リストを出力
@@ -331,10 +347,10 @@ puts "EDP"
 
 ## プロット命令
 puts "plot $train_graph with lines linecolor rgb \"gray0\"," +
-     "$start_pos with points pointtype 6 pointsize 1 linecolor rgb \"gray0\"," +
-     "$end_pos with points pointtype 8 pointsize 1 linecolor rgb \"gray0\"," +
-     "$start_pos with points pointtype 7 pointsize 0.7 linecolor rgb \"gray100\"," +
-     "$end_pos with points pointtype 9 pointsize 0.7 linecolor rgb \"gray100\""
+  "$start_pos with points pointtype 6 pointsize 1.6 linecolor rgb \"gray0\"," +
+  "$end_pos with points pointtype 8 pointsize 1.6 linecolor rgb \"gray0\"," +
+  "$start_pos with points pointtype 7 pointsize 1.4 linecolor rgb \"gray100\"," +
+  "$end_pos with points pointtype 9 pointsize 1.4 linecolor rgb \"gray100\""
 
 ## 終了処理
 puts "set output"

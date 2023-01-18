@@ -8,13 +8,14 @@
 #     $3: 上下の別 (up/down)
 #     $4: 列車番号
 
+bindir="$(dirname $0)/../bin"
 db_dir="$1"
 dia_day="$2"
 direction="$3"
 train_num="$4"
-station_list_file="bin/station_list_for_timetable_${direction}.txt"
+station_list_file="$bindir/station_list_for_timetable_${direction}.txt"
 
-bin/output-timetable.sh ${db_dir} ${dia_day} ${train_num} |
+$bindir/output-timetable.sh ${db_dir} ${dia_day} ${train_num} |
 awk 'BEGIN{FS=",";OFS=","}$2==""{$2="↓"}{print}'         > /tmp/$$-timetable-with-passmark.tmp
 
 # ヘッダ出力
@@ -28,7 +29,7 @@ origin=$(head -n 4 /tmp/$$-timetable-with-passmark.tmp | tail -n 1 | cut -d, -f1
 destination=$(tail -n 1 /tmp/$$-timetable-with-passmark.tmp | cut -d, -f1)
 
 # 時刻表用駅一覧と結合して割り付け
-bin/sfjoin.rb -t, -j 1 -m LOUTER -e "||" \
+$bindir/sfjoin.rb -t, -j 1 -m LOUTER -e "||" \
     ${station_list_file} \
     /tmp/$$-timetable-with-passmark.tmp |
 # 列車の運行区間外となる行を削除
