@@ -5,13 +5,14 @@
 #     $2: 出力開始位置（m本目から）
 #     $3: 出力本数（n本分）
 
-bindir="$(dirname $0)/../bin"
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
 
-# 出力区間指定
+# 出力区間（列番号）指定
 timetable_file="$1"
-start_pos="$2"
+start_pos="$(($2 + 1))"
 trains_per_page="$3"
-end_pos="$((${start_pos} + ${trains_per_page} - 1))"
+end_pos="$((start_pos + trains_per_page - 1))"
 
 cat <<HEADER
 \begin{table}[htbp]

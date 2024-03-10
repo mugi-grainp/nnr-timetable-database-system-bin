@@ -32,11 +32,13 @@ NR == 2 {
     train_type_line = $0
     remark_line = gensub(/普通|急行|特急|観光|回送/, "", "g", remark_line)
     remark_line = gensub(/ワンマン/, "\\\\onemanmark", "g", remark_line)
+    remark_line = gensub(/※☆/, "\\\\\\exphs", "g", remark_line)
+    remark_line = gensub(/☆/, "\\\\\\expgs", "g", remark_line)
     remark_line = gensub(/※/, "\\\\\\exph", "g", remark_line)
     remark_line = gensub(/▲/, "\\\\\\expj", "g", remark_line)
     remark_line = gensub(/○/, "\\\\\\expk", "g", remark_line)
     remark_line = gensub(/種別/, "注記", "g", remark_line)
-    train_type_line = gensub(/[○▲※]/, "", "g", train_type_line)
+    train_type_line = gensub(/[○▲※☆]/, "", "g", train_type_line)
     train_type_line = gensub(/普通/, "", "g", train_type_line)
     train_type_line = gensub(/急行/, "\\\\expmark", "g", train_type_line)
     train_type_line = gensub(/特急/, "\\\\ltdexpmark", "g", train_type_line)
@@ -55,7 +57,7 @@ NR == 3 {
     next
 }
 
-NR >= 4 && NR <= 67 {
+NR >= 4 && NR <= 68 {
     gsub(/\|\|/, "\\notthrough")
     gsub(/↓/, "\\pass")
     for (i = NF + 1; i <= trains_per_page + 1; i++) {

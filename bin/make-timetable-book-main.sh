@@ -7,6 +7,10 @@
 #     $2: ダイヤ区分 (weekday/saturday/holiday)
 #     $3: 上下の別 (up/down)
 
+# ベースディレクトリ設定
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
+
 db_dir="$1"
 dia_day="$2"
 direction="$3"
@@ -22,18 +26,17 @@ else
     exit 1
 fi
 
-train_list_file="timetable_book/train_list_for_timetable_${dia_day}_${direction}.csv"
-station_list_file="bin/station_list_for_timetable_${direction}.txt"
+train_list_file="$basedir/timetable_book/train_list_for_timetable_${dia_day}_${direction}.csv"
+station_list_file="$bindir/station_list_for_timetable_${direction}.txt"
 
 # 各列車の時刻表を出力
 # 車両取替前後の重複分だけを取り除くため、5行目の uniq 前にはソートしない
-cat $train_list_file           |
-cut -d, -f1                    |
-sed 's/-[12]//'                |
+cut -d, -f1 $train_list_file   |
+sed 's/-[012]//'               |
 LANG=C uniq                    |
 tee /tmp/$$-train-num-list.tmp |
-xargs -IXXX bash -c "bin/sfjoin.rb -t, -j 1 -m LOUTER ${station_list_file} \
-    <(bin/make-timetable-book-each-train.sh ${db_dir} ${dia_day} ${direction} XXX) > /tmp/$$-timetable-XXX.tmp"
+xargs -IXXX bash -c "$bindir/sfjoin.rb -t, -j 1 -m LOUTER ${station_list_file} \
+    <($bindir/make-timetable-book-each-train.sh ${db_dir} ${dia_day} ${direction} XXX) > /tmp/$$-timetable-XXX.tmp"
 
 # 列車番号リストをもとに、1本ずつくっつける
 cp ${station_list_file} /tmp/$$-timetable-all.tmp

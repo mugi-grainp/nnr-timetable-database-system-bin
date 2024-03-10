@@ -10,8 +10,31 @@
 #     -u, --direction 上下の別 (up/down)
 # URL_LIST_FILE 各列車別時刻表へのURL
 
+show_help() {
+    cat << HELP_MSG >&2
+timetable-download-and-convert.sh v1.0
+時刻表のダウンロードと変換
+
+呼び出し
+    ./timetable-download-and-convert.sh OPTIONS URL_LIST_FILE
+
+オプション（必須）
+    -b, --database  データベースディレクトリ名
+    -d, --dia-day   ダイヤ区分 (weekday/saturday/holiday)
+    -u, --direction 上下の別 (up/down)
+
+ヘルプ
+    -h, --help      このヘルプを表示
+    --version       バージョン情報を表示
+
+コマンドライン引数
+    URL_LIST_FILE   取得済フラグ(X),各列車別時刻表へのURLを記述した
+                    CSV形式のリストファイル
+HELP_MSG
+}
+
 # コマンドライン解析
-OPTIONS=$(getopt -n $(basename $0) -o b:d:u: -l database:,dia-day:,direction: -- $@)
+OPTIONS=$(getopt -n $(basename $0) -o b:d:u:h -l database:,dia-day:,direction:,version,help -- $@)
 eval set -- "$OPTIONS"
 while [ $# -gt 0 ]
 do
@@ -19,6 +42,14 @@ do
         -b | --database) db_dir="$2" ;;
         -d | --dia-day ) dia_day="$2" ;;
         -u | --direction) direction="$2" ;;
+        --help )
+            show_help
+            exit 0
+            ;;
+        --version )
+            echo 'timetable-download-and-convert.sh v1.0'
+            exit 0
+            ;;
         --) shift; break;;
     esac
     shift
@@ -26,6 +57,7 @@ done
 
 if [ "$db_dir" = "" ] || [ "$dia_day" = "" ] || [ "$direction" = "" ] ; then
     echo "$(basename $0): データベースディレクトリ、ダイヤ区分、上下線区分はいずれも必須です。" >&2
+    show_help
     exit 1
 fi
 
@@ -67,8 +99,8 @@ do
     esac
 
     echo "$line"
-    curl -sS "$line" > timetable_page/${dia_day}/${keitou_code}-1.htm
-    bin/extract-timetable-from-html.sh --direction=${direction} timetable_page/${dia_day}/${keitou_code}-1.htm > ${db_dir}/${dia_day}/timetable_${keitou_code}-1.csv
+    curl -sS "$line" > ${dia_day}/${keitou_code}-0.htm
+    ./extract-timetable-from-html.sh --direction=${direction} ${dia_day}/${keitou_code}-0.htm > ${db_dir}/${dia_day}/timetable_${keitou_code}-0.csv
 
 done 9< /tmp/$$-urllist.tmp
 

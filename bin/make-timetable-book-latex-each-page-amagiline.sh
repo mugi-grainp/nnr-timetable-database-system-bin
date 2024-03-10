@@ -5,13 +5,14 @@
 #     $2: 出力開始位置（m本目から）
 #     $3: 出力本数（n本分）
 
-bindir="$(dirname $0)/../bin"
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
 
 # 出力区間指定
 timetable_file="$1"
-start_pos="$2"
+start_pos="$(($2 + 1))"
 trains_per_page="$3"
-end_pos="$((${start_pos} + ${trains_per_page} - 1))"
+end_pos="$((start_pos + trains_per_page - 1))"
 
 cat <<HEADER
 \begin{table}[htbp]
@@ -23,9 +24,9 @@ cat <<HASHIRA_L
 \begin{minipage}{1.1\zw}
 \centering
 \printifeven{%
-    \pbox<t>[0.8\vsize][l]{\large 西鉄甘木線　<DIA_DAY>ダイヤ　<DIRECTION>}%
+    \pbox<t>{\large 西鉄甘木線　<DIA_DAY>ダイヤ　<DIRECTION>}%
 }{%
-    \pbox<t>[0.8\vsize][l]{ }%
+    \pbox<t>{ }%
 }
 \end{minipage}
 \hfill
@@ -44,7 +45,7 @@ cat $timetable_file |
 # 1ページに掲載する分を切り出し
 cut -d, -f1,${start_pos}-${end_pos}  |
 # LaTeXコードへの変換の主要部分
-awk -v trains_per_page=${trains_per_page} -f $bindir/translate-to-latex-amagiline.awk |
+awk -v trains_per_page=${trains_per_page} -f ${bindir}/translate-to-latex-amagiline.awk |
 # 区切り記号（カンマ）を、TeXの表区切り記号である & に置換
 sed 's/,/ \& /g' |
 # 生成過程で生じる優等列車太字タグの空タグを除去
@@ -70,14 +71,13 @@ cat <<HASHIRA_R
 \begin{minipage}{1.1\zw}
 \centering
 \printifodd{%
-    \pbox<t>[0.8\vsize][l]{\large 西鉄甘木線　<DIA_DAY>ダイヤ　<DIRECTION>}%
+    \pbox<t>{\large 西鉄甘木線　<DIA_DAY>ダイヤ　<DIRECTION>}%
 }{%
-    \pbox<t>[0.8\vsize][l]{ }%
+    \pbox<t>{ }%
 }
 \end{minipage}
 HASHIRA_R
 
 cat <<FOOTER
 \end{table}
-\clearpage
 FOOTER

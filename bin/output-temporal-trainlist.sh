@@ -7,6 +7,8 @@
 #     $2: ダイヤ区分 (weekday/saturday/holiday)
 #     $3: "all-list"を指定したとき、時刻表データがない列車も出力する [オプション]
 
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
 db_dir="$1"
 dia_day="$2"
 
@@ -29,7 +31,7 @@ find ${db_dir}/${dia_day}/ -type f -name 'timetable_'"${dia_day}"'*.csv'        
 sed -e "s;^${db_dir}/${dia_day}/timetable_;;" -e 's;\.csv$;;' -e 's;_; ;'       |
 
 # 列車編成両数表の1行を出力する
-xargs -IXXX bash -c "bin/output-temporal-trainlist-line.sh ${db_dir} XXX" |
+xargs -IXXX bash -c "${bindir}/output-temporal-trainlist-line.sh ${db_dir} XXX" |
 LANG=C sort -s -t, -k1,1                                             > /tmp/$$-traincartable-list.tmp
 
 cat /tmp/$$-traincartable-list.tmp

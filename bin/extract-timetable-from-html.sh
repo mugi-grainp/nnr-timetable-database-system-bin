@@ -27,11 +27,11 @@ operation_id=$(basename -s .htm $1 | cut -d_ -f2)
 train_number=${operation_id%-*}
 # 駅名順序表の決定
 case $train_number in
-    6??? ) station_list_file="bin/station_list_dazaifuline.txt" ;;
-    8??? ) station_list_file="bin/station_list_dazaifuline.txt" ;;
-    L??? ) station_list_file="bin/station_list_dazaifuline.txt" ;;
-    7??? ) station_list_file="bin/station_list_amagiline.txt" ;;
-    * ) station_list_file="bin/station_list.txt" ;;
+    6??? ) station_list_file="./station_list_dazaifuline.txt" ;;
+    8??? ) station_list_file="./station_list_dazaifuline.txt" ;;
+    L??? ) station_list_file="./station_list_dazaifuline.txt" ;;
+    7??? ) station_list_file="./station_list_amagiline.txt" ;;
+    * ) station_list_file="./station_list.txt" ;;
 esac
 
 # ヘッダ出力
@@ -70,10 +70,10 @@ sed -e 's/着/:00/' -e 's/発/:00/' > /tmp/$$-timetable.tmp
 # 駅名順序表と合わせることにより，通過駅込みで時刻表を作る
 if [ $direction = "down" ]; then
     ## 下り処理時
-    ruby bin/sfjoin.rb -m LOUTER -j 1 -t, "$station_list_file" /tmp/$$-timetable.tmp > /tmp/$$-timetable2.tmp
+    ruby sfjoin.rb -m LOUTER -j 1 -t, "$station_list_file" /tmp/$$-timetable.tmp > /tmp/$$-timetable2.tmp
 elif [ $direction = "up" ]; then
     ## 上り処理時
-    ruby bin/sfjoin.rb -m LOUTER -j 1 -t, <(tac "$station_list_file") /tmp/$$-timetable.tmp > /tmp/$$-timetable2.tmp
+    ruby sfjoin.rb -m LOUTER -j 1 -t, <(tac "$station_list_file") /tmp/$$-timetable.tmp > /tmp/$$-timetable2.tmp
 fi
 
 # 管理番号と列車番号を付与

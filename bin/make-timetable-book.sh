@@ -11,6 +11,10 @@
 # 初期値設定
 list_only="no"
 
+# 基準ディレクトリ設定
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
+
 # コマンドライン解析
 OPTIONS=$(getopt -n $(basename $0) -o b:d:u: -l database:,dia-day:,direction:,list-only -- $@)
 eval set -- "$OPTIONS"
@@ -71,26 +75,26 @@ awk -F, -v omuta_begin=${omuta_begin_index} \
 sort -s -t, -k5,5 > /tmp/$$-train-order-at-futsukaichi.tmp
 
 # 太宰府線列車をどの天神大牟田線列車の後に入れるかを算出
-bin/determine_dazaifu_insertion_order.rb /tmp/$$-train-order-at-futsukaichi.tmp |
+$bindir/determine_dazaifu_insertion_order.rb /tmp/$$-train-order-at-futsukaichi.tmp |
 grep -E -B1 '^(6|0301|0300)'    |
 grep -v -- '--'                 |
 cut -d, -f1,6-12 > /tmp/$$-dazaifu_insertion_pos.tmp
 
 # 時刻表生成用の列車順序リストを生成
-bin/make-timetable-order-list.rb \
+$bindir/make-timetable-order-list.rb \
     /tmp/$$-dazaifu_insertion_pos.tmp \
     ${train_list_file} |
 awk -F, -v omuta_begin=${omuta_begin_index} \
         -v omuta_end=${omuta_end_index} \
         -v dazaifu_begin=${dazaifu_begin_index} \
         -v dazaifu_end=${dazaifu_end_index} '($2 > omuta_begin && $2 < omuta_end) || ($2 > dazaifu_begin && $2 < dazaifu_end)' |
-sed "/^${last_train}/q" > timetable_book/train_list_for_timetable_${dia_day}_${direction}.csv
+sed "/^${last_train}/q" > ${basedir}/timetable_book/train_list_for_timetable_${dia_day}_${direction}.csv
 
 # 時刻表を生成して標準出力へ出力
 if [ "$list_only" = "yes" ]; then
     exit 0
 else
-    bin/make-timetable-book-main.sh ${db_dir} ${dia_day} ${direction}
+    $bindir/make-timetable-book-main.sh ${db_dir} ${dia_day} ${direction}
 fi
 
 rm /tmp/$$-*

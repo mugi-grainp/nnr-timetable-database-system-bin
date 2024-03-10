@@ -7,11 +7,13 @@
 #     $2: ダイヤ区分 (weekday/saturday/holiday)
 #     $3: 列車番号
 
+basedir="$(dirname $0)/../.."
+bindir="$(dirname $0)"
 db_dir="$1"
 dia_day="$2"
 train_num="$3"
 
-train_info=($(cat ${db_dir}/${dia_day}/train_list_${dia_day}.csv | grep "^${train_num}" | head -n 1 | awk -F, '{print $1, $3, $6}'))
+train_info=$(grep "^${train_num}" ${basedir}/${db_dir}/${dia_day}/train_list_${dia_day}.csv | head -n 1 | awk -F, '{print $1, $3, $6}')
 
 # ヘッダ出力
 echo "列車番号,${train_num}"
@@ -19,7 +21,7 @@ echo "種別,${train_info[1]}"
 echo "行先,${train_info[2]}"
 
 # 列車番号から関係ファイルをすべて取り出す
-find ${db_dir}/${dia_day}/ -type f -name 'timetable_'"${dia_day}_${train_num}"'*.csv' |
+find ${basedir}/${db_dir}/${dia_day}/ -type f -name 'timetable_'"${dia_day}_${train_num}"'*.csv' |
 xargs awk '
     BEGIN { FS = ","; OFS = "," }
     $1 == "管理番号" { next }
