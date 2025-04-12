@@ -1,24 +1,15 @@
 #!/bin/bash
 
-# output-traincartable.sh
-# 列車編成両数表全体を出力
+# output-temporal-trainlist.sh
+# 列車一覧を出力
 # コマンドライン引数
 #     $1: データベースディレクトリ名
 #     $2: ダイヤ区分 (weekday/saturday/holiday)
-#     $3: "all-list"を指定したとき、時刻表データがない列車も出力する [オプション]
 
 basedir="$(dirname $0)/../.."
 bindir="$(dirname $0)"
 db_dir="$1"
 dia_day="$2"
-
-case "$3" in
-    "all-list"          ) output_flag="-a 1" ;;
-    "all-timetable"     ) output_flag="-a 1" ;;
-    "missing-timetable" ) output_flag="-v 1" ;;
-    "missing-in-list"   ) output_flag="-v 2" ;;
-    * ) output_flag="" ;;
-esac
 
 # フィールド出力順序説明を兼ねて、ヘッダを出力する
 echo '管理番号,掲載順序,列車種別,起点駅,終点駅,行先表示駅名,起点出発時刻,終点到着時刻'
